@@ -28,12 +28,10 @@ function handlerSubmit(event) {
     });
     return;
   }
-  form.reset();
+  clearGallery();
   showLoader();
   getImagesByQuery(query)
     .then(hits => {
-      clearGallery();
-
       if (hits.length === 0) {
         iziToast.error({
           title: 'No results',
@@ -45,9 +43,16 @@ function handlerSubmit(event) {
         return;
       }
       createGallery(hits);
+      form.reset();
     })
     .catch(error => {
       console.log(error);
+      iziToast.error({
+    title: 'Error',
+    message: 'Something went wrong while fetching data. Please try again later!',
+    timeout: 4000,
+    position: 'topRight',
+  });
     })
     .finally(() => hideLoader());
 }
